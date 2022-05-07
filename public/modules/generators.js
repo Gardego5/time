@@ -3,9 +3,13 @@ export function generateDayDiv(date) {
 
     let tag = Object.assign(document.createElement('div'), {
         className: 'day',
-        dateValue: Date()
+        date: date,
+        onclick: function (event) {
+            /** Get day info */
+        }
     });
 
+    /** List of elements to add to tag. */
     [
         Object.assign(document.createElement('p'), {
             textContent: `${dayNum}`,
