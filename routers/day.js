@@ -6,7 +6,7 @@ const { validateDate, cleanDay } = require('./utils.js')
 const DayRouter = express.Router();
 
 DayRouter.param('date', (req, res, next, id) => {
-    const dayIndex = data.findIndex(day => day.date === id);
+    const dayIndex = data.findIndex(day => day.date === (new Date(id)).toJSON());
     if (dayIndex !== -1) {
         req.dayIndex = dayIndex;
         req.day = data[dayIndex];
