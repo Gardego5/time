@@ -8,8 +8,18 @@ const editor = document.getElementById('editor');
 const stats = document.getElementById('stats');
 
 const currentDate = new Date();
-const currentMonth = daysInMonth(currentDate);
-const calendarMonthOffset = currentMonth[0].getDay();
+let currentMonth = daysInMonth(currentDate);
+const calendarMonthOffset = (new Date(currentMonth[0].date)).getDay();
+const calendarMonthFiller = 7 - (currentMonth.length + calendarMonthOffset) % 7;
+
+let monthData = await fetch(`/day/ofMonth/${currentDate}`);
+if (monthData.ok) {
+    monthData = await monthData.json();
+    currentMonth = currentMonth.map(day => {
+        const dayWithData = monthData.find(data => data.date === day.date);
+        return dayWithData ? dayWithData : day;
+    })
+}
 
 monthTitle.textContent = String(currentDate).split(' ')[1];
 
@@ -20,7 +30,7 @@ for (let i = 0; i < calendarMonthOffset; i++) {
 for (let day of currentMonth) {
     mainCalendar.appendChild(generateDayDiv(day));
 }
-for (let i = 0; i < (currentMonth.length - calendarMonthOffset + 1) % 7; i++) {
+for (let i = 0; i < calendarMonthFiller ; i++) {
     mainCalendar.appendChild(Object.assign(document.createElement('div'), { className: 'day' }));
 }
 

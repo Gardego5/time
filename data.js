@@ -9,7 +9,8 @@ const data = [
     },
     {
         date: (new Date(2022, 4, 5)).toJSON(),
-        hours: 3
+        hours: 3,
+        placements: 4
     },
 ]
 

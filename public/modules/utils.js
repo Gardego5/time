@@ -3,6 +3,8 @@ export function daysInMonth(date) {
     const year = date.getFullYear(); 
     return Array.from(
         { length: new Date(year, month + 1, 0).getDate() },
-        (_, i) => new Date(year, month, i + 1)
+        (_, i) => {
+            return {date: (new Date(year, month, i + 1)).toJSON()}
+        }
     )
 }
