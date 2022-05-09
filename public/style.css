@@ -66,6 +66,6 @@
     background-color: lightblue;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     grid-column: span 7;
 }

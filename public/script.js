@@ -4,8 +4,14 @@ import { daysInMonth } from "./modules/utils.js";
 /** Getting Main Elements */
 const mainCalendar = document.getElementById('main-calendar');
 const monthTitle = document.getElementById('month').children[0];
-const editor = document.getElementById('editor');
 const stats = document.getElementById('stats');
+const statFields = {
+    hours: document.getElementById('hours'),
+    placements: document.getElementById('placements'),
+    videos: document.getElementById('videos'),
+    "return visits": document.getElementById('rvs'),
+    studies: document.getElementById('studies'),
+};
 
 const currentDate = new Date();
 let currentMonth = daysInMonth(currentDate);
@@ -32,6 +38,14 @@ for (let day of currentMonth) {
 }
 for (let i = 0; i < calendarMonthFiller ; i++) {
     mainCalendar.appendChild(Object.assign(document.createElement('div'), { className: 'day' }));
+}
+
+let totalsData = await fetch(`/month/${currentDate}/total`);
+if (totalsData.ok) {
+    totalsData = await totalsData.json();
+    for (let field of Object.getOwnPropertyNames(statFields)) {
+        statFields[field].textContent = `${field}: ${totalsData[field]}`
+    }
 }
 
 /** Move Info Box to bottom */
