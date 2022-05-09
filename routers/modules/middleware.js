@@ -9,10 +9,11 @@ const validate = (req, res, next) => {
     }
 };
 
-const selectMonth = (req, res, next) => {
-    const month = (new Date(req.date)).getMonth();
-    const year = (new Date(req.date)).getFullYear();
-    req.month = req.data.filter(day => (new Date(day.date)).getMonth() === month && (new Date(day.date)).getFullYear() === year );
+const selectMonth = async (req, res, next) => {
+    req.month = await req.db.all(`
+        SELECT * FROM "time" 
+        WHERE strftime('%Y-%m', "date") = strftime('%Y-%m', ?);`
+    , [req.date]);
     next();
 };
 

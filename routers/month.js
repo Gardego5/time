@@ -5,15 +5,14 @@ import middleware from './modules/middleware.js';
 
 const MonthRouter = express.Router({mergeParams: true});
 
-MonthRouter.param('date', (req, res, next, id) => {
+MonthRouter.param('date', async (req, res, next, id) => {
     req.date = (new Date(id)).toJSON();
     if (req.date === null) {
         res.status(400).send("Not a valid day.");
     }
-    req.dayIndex = req.data.findIndex(day => day.date === req.date);
-    if (req.dayIndex !== -1) {
-        req.day = req.data[req.dayIndex];
-    }
+
+    req.day = await req.db.get(`SELECT * FROM "time" WHERE "date" = ?;`, [req.date]);
+
     next();
 });
 

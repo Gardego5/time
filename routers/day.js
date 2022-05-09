@@ -4,15 +4,13 @@ import middleware from './modules/middleware.js';
 
 const DayRouter = express.Router({mergeParams: true});
 
-DayRouter.param('date', (req, res, next, id) => {
+DayRouter.param('date', async (req, res, next, id) => {
     req.date = (new Date(id)).toJSON();
     if (req.date === null) {
         res.status(400).send("Not a valid day.");
     }
-    req.dayIndex = req.data.findIndex(day => day.date === req.date);
-    if (req.dayIndex !== -1) {
-        req.day = req.data[req.dayIndex];
-    }
+    req.day = await req.db.get(`SELECT * FROM "time" WHERE "date" = ?;`, [req.date]);
+
     next();
 });
 
@@ -25,16 +23,17 @@ DayRouter.get('/:date', (req, res, next) => {
 });
 
 DayRouter.put('/', middleware.validate, async (req, res, next) => {
-    if (req.data.findIndex(d => d.date === req.day.date) >= 0) {
+    const currentValue = await req.db.get(`SELECT * FROM "time" WHERE "date" = ?;`, [req.day.date])
+
+    if (currentValue) {
         res.status(409).send("Day already exists.");
     } else {
-        const sql = `INSERT INTO time (
-            date, hours, placements, videos, "return visits", studies
-        ) VALUES (
-            ?, ?, ?, ?, ?, ?
-        )`
-        await req.db.run(sql, Object.values(req.day));
-        const entry = await req.db.get('SELECT * FROM time ORDER BY id DESC LIMIT 1');
+        await req.db.run(`
+            INSERT INTO "time" ("date", "hours", "placements", "videos", "return visits", "studies")
+            VALUES (?, ?, ?, ?, ?, ?);
+        `, Object.values(req.day));
+
+        const entry = await req.db.get('SELECT * FROM "time" ORDER BY "id" DESC LIMIT 1;');
         res.status(201).send(entry);
     }
 });

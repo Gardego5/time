@@ -19,15 +19,15 @@ app.use(express.json());
 
 app.use(async (req, res, next) => {
     req.db = await dbPromise;
-    req.data = await req.db.all('SELECT * FROM time;');
     next();
 });
 
 app.use('/day', DayRouter);
 app.use('/month', MonthRouter);
 
-app.get('/all', (req, res, next) => {
-    res.status(200).send(req.data);
+app.get('/all', async (req, res, next) => {
+    const data = await req.db.all('SELECT * FROM time;');
+    res.status(200).send(data);
 });
 
 /** Start Server */
