@@ -24,12 +24,18 @@ DayRouter.get('/:date', (req, res, next) => {
     }
 });
 
-DayRouter.put('/', middleware.validate, (req, res, next) => {
+DayRouter.put('/', middleware.validate, async (req, res, next) => {
     if (req.data.findIndex(d => d.date === req.day.date) >= 0) {
         res.status(409).send("Day already exists.");
     } else {
-        req.data.push(req.day);
-        res.status(201).send(req.data[req.data.length - 1]);
+        const sql = `INSERT INTO time (
+            date, hours, placements, videos, "return visits", studies
+        ) VALUES (
+            ?, ?, ?, ?, ?, ?
+        )`
+        await req.db.run(sql, Object.values(req.day));
+        const entry = await req.db.get('SELECT * FROM time ORDER BY id DESC LIMIT 1');
+        res.status(201).send(entry);
     }
 });
 

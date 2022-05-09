@@ -1,8 +1,8 @@
 import { validateDate, cleanDay } from './utils.js';
 
 const validate = (req, res, next) => {
-    if (validateDate(req.day.date)) {
-        req.day = cleanDay(req.day);
+    if (validateDate(req.body.date)) {
+        req.day = cleanDay(req.body);
         next();
     } else {
         res.status(400).send("Not a valid day object.");
