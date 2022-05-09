@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 
-const { data } = require('./data.js');
-const { DayRouter } = require('./routers/day.js');
-const { MonthRouter } = require('./routers/month.js');
+import data from './data.js';
+import DayRouter from './routers/day.js';
+import MonthRouter from './routers/month.js';
 
 const app = express();
 

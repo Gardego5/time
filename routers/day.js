@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 
-const middleware = require('./modules/middleware.js');
+import middleware from './modules/middleware.js';
 
 const DayRouter = express.Router({mergeParams: true});
 
@@ -33,4 +33,4 @@ DayRouter.put('/', middleware.validate, (req, res, next) => {
     }
 });
 
-module.exports = { DayRouter };
+export default DayRouter;

@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 
-const { zerod } = require('./modules/utils.js');
-const middleware = require('./modules/middleware.js');
+import { zerod } from './modules/utils.js';
+import middleware from './modules/middleware.js';
 
 const MonthRouter = express.Router({mergeParams: true});
 
@@ -47,4 +47,4 @@ MonthRouter.get('/:date/total/', (req, res, next) => {
     }
 });
 
-module.exports = { MonthRouter };
+export default MonthRouter;

@@ -23,8 +23,4 @@ const cleanDay = day => {
 
 const zerod = num => num ? num : 0;
 
-module.exports = {
-    validateDate,
-    cleanDay,
-    zerod
-};
+export { validateDate, cleanDay, zerod };

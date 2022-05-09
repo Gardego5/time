@@ -1,4 +1,4 @@
-const { validateDate, cleanDay } = require('./utils.js');
+import { validateDate, cleanDay } from './utils.js';
 
 const validate = (req, res, next) => {
     if (validateDate(req.day.date)) {
@@ -16,4 +16,4 @@ const selectMonth = (req, res, next) => {
     next();
 };
 
-module.exports = { validate, selectMonth };
+export default { validate, selectMonth };
