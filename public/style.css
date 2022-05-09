@@ -62,17 +62,10 @@
     width: 1.5em;
 }
 
-.editor,
 .stats {
     background-color: lightblue;
     display: flex;
-    flex-direction: column;
     align-items: center;
-}
-
-.editor {
-    grid-column: span 5;
-}
-.stats {
-    grid-column: span 2;
+    justify-content: space-between;
+    grid-column: span 7;
 }

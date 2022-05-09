@@ -21,7 +21,10 @@ const cleanDay = day => {
     return day;
 }
 
+const zerod = num => num ? num : 0;
+
 module.exports = {
     validateDate,
-    cleanDay
+    cleanDay,
+    zerod
 };

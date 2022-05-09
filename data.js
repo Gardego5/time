@@ -1,17 +1,20 @@
 const data = [
     {
-        date: (new Date(2022, 4, 2)).toJSON(),
+        date: (new Date('May 2, 2022')).toJSON(),
         hours: 3
     },
     {
-        date: (new Date(2022, 4, 4)).toJSON(),
+        date: (new Date('May 5, 2022')).toJSON(),
         hours: 3
     },
     {
-        date: (new Date(2022, 4, 5)).toJSON(),
+        date: (new Date('May 6, 2022')).toJSON(),
         hours: 3,
-        placements: 4
     },
+    {
+        date: (new Date('May 8, 2022')).toJSON(),
+        hours: 2,
+    }
 ]
 
 module.exports = { data };

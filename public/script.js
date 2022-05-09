@@ -12,7 +12,7 @@ let currentMonth = daysInMonth(currentDate);
 const calendarMonthOffset = (new Date(currentMonth[0].date)).getDay();
 const calendarMonthFiller = 7 - (currentMonth.length + calendarMonthOffset) % 7;
 
-let monthData = await fetch(`/day/ofMonth/${currentDate}`);
+let monthData = await fetch(`/month/${currentDate}`);
 if (monthData.ok) {
     monthData = await monthData.json();
     currentMonth = currentMonth.map(day => {
@@ -35,5 +35,4 @@ for (let i = 0; i < calendarMonthFiller ; i++) {
 }
 
 /** Move Info Box to bottom */
-mainCalendar.appendChild(editor);
 mainCalendar.appendChild(stats);
