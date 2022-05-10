@@ -41,6 +41,7 @@ export const dayInnerElements = (day, editor = false) => {
         }),
     ]));
 
+    // End Edit Button
     innerElements.splice(13, 0, Object.assign(document.createElement("button"), {
         textContent: "✓",
         className: 'endEdit',
@@ -53,8 +54,6 @@ export const dayInnerElements = (day, editor = false) => {
                 studies: nulledIfEmpty(document.getElementById(`studies_data_${dayNum}`).value),
             };
 
-            console.log(data);
-
             const req = await fetch(`/day/${this.parentElement.day.date}`, {
                 method: 'PUT',
                 headers: {
@@ -63,9 +62,8 @@ export const dayInnerElements = (day, editor = false) => {
                 body: JSON.stringify(data),
             });
 
-            console.log(req);
-
             this.parentElement.toggleEdit();
+            this.parentElement.updateData();
         }
     }));
 
