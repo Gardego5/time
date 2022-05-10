@@ -32,21 +32,23 @@ DayRouter.put('/:date', async (req, res, next) => {
         for (let property of Object.getOwnPropertyNames(currentValue)) {
             req.day[property] = req.day.hasOwnProperty(property) ? req.day[property] : currentValue[property];
         }
-    } else {
-        res.status(404).send("No entry for that day.");
-        return;
-    }
 
-    await req.db.run(`
-        UPDATE "time"
-        SET
-            "hours" = ?,
-            "placements" = ?,
-            "videos" = ?,
-            "return visits" = ?,
-            "studies" = ?
-        WHERE "date" = ?;
-    `, [req.day.hours, req.day.placements, req.day.videos, req.day["return visits"], req.day.studies, req.date]);
+        await req.db.run(`
+            UPDATE "time"
+            SET
+                "hours" = ?,
+                "placements" = ?,
+                "videos" = ?,
+                "return visits" = ?,
+                "studies" = ?
+            WHERE "date" = ?;
+        `, [req.day.hours, req.day.placements, req.day.videos, req.day["return visits"], req.day.studies, req.date]);
+    } else {
+        await req.db.run(`
+            INSERT INTO "time" ("date", "hours", "placements", "videos", "return visits", "studies")
+            VALUES (?, ?, ?, ?, ?, ?);
+        `, [req.date, req.day.hours, req.day.placements, req.day.videos, req.day["return visits"], req.day.studies]);
+    }
 
     const entry = await req.db.get('SELECT * FROM "time" WHERE "date" = ?;', [req.date]);
     res.status(200).send(entry);

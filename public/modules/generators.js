@@ -12,7 +12,6 @@ export function generateDayDiv(day) {
             }
         },
         toggleEdit: function() {
-            console.log(this.selectedToEdit)
             if (this.selectedToEdit) {
                 /** Weird thing, you must run in setTimeout, otherwise
                  *  you end up retriggering the dayDiv's onclick method

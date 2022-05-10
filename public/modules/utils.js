@@ -9,6 +9,14 @@ export const daysInMonth = (date) => {
     )
 }
 
+const nulledIfEmpty = str => {
+    if (str.length === 0) {
+        return null;
+    } else {
+        return Number(str);
+    }
+}
+
 export const dayInnerElements = (day, editor = false) => {
     const dayNum = getDayNum(day);
     const innerElements = [
@@ -36,18 +44,30 @@ export const dayInnerElements = (day, editor = false) => {
     innerElements.splice(13, 0, Object.assign(document.createElement("button"), {
         textContent: "✓",
         className: 'endEdit',
-        onclick: function(event) {
+        onclick: async function(event) {
+            const data = {
+                hours: nulledIfEmpty(document.getElementById(`hours_data_${dayNum}`).value),
+                placements: nulledIfEmpty(document.getElementById(`placements_data_${dayNum}`).value),
+                videos: nulledIfEmpty(document.getElementById(`videos_data_${dayNum}`).value),
+                "return visits": nulledIfEmpty(document.getElementById(`return_visits_data_${dayNum}`).value),
+                studies: nulledIfEmpty(document.getElementById(`studies_data_${dayNum}`).value),
+            };
+
+            console.log(data);
+
+            const req = await fetch(`/day/${this.parentElement.day.date}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            console.log(req);
+
             this.parentElement.toggleEdit();
         }
     }));
-    /*
-    if (editor) {
-        innerElements.splice(9, 0, Object.assign(document.createElement("button", {
-
-        })));
-        innerElements[10].style.gridColumn = "2";
-    }
-    */
 
     return innerElements;
 }
