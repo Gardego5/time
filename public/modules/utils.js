@@ -21,19 +21,33 @@ export const dayInnerElements = (day, editor = false) => {
             textContent: `${field}:`,
             className: 'label',
         }),
-        Object.assign(document.createElement(editor ? "input" : "p"), {
-            textContent: `${day[field] ? day[field] : ''}`,
+        Object.assign(document.createElement("input"), {
+            value: `${day[field] ? day[field] : ''}`,
             className: 'data',
-            id: `_${dayNum}_${field}_data`,
+            id: `${field.replace(/ /g, "_")}_data_${dayNum}`,
+        }),
+        Object.assign(document.createElement("p"), {
+            textContent: `${day[field] ? day[field] : ''}`,
+            className: 'display',
+            id: `${field.replace(/ /g, "_")}_data_display_${dayNum}`,
         }),
     ]));
 
+    innerElements.splice(13, 0, Object.assign(document.createElement("button"), {
+        textContent: "✓",
+        className: 'endEdit',
+        onclick: function(event) {
+            this.parentElement.toggleEdit();
+        }
+    }));
+    /*
     if (editor) {
         innerElements.splice(9, 0, Object.assign(document.createElement("button", {
 
         })));
         innerElements[10].style.gridColumn = "2";
     }
+    */
 
     return innerElements;
 }
