@@ -17,6 +17,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static('public'));
 app.use(express.json());
 
+/** Attach database so accesible to requests. */
 app.use(async (req, res, next) => {
     req.db = await dbPromise;
     next();
@@ -26,7 +27,7 @@ app.use('/day', DayRouter);
 app.use('/month', MonthRouter);
 
 app.get('/all', async (req, res, next) => {
-    const data = await req.db.all('SELECT * FROM time;');
+    const data = await req.db.all('SELECT * FROM "time";');
     res.status(200).send(data);
 });
 
