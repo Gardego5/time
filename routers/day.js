@@ -9,10 +9,10 @@ DayRouter.param('date', async (req, res, next, id) => {
     req.date = (new Date(id)).toJSON();
     if (req.date === null) {
         res.status(400).send("Not a valid day.");
+    } else {
+        req.day = await req.db.get(`SELECT * FROM "time" WHERE "date" = ?;`, [req.date]);
+        next();
     }
-    req.day = await req.db.get(`SELECT * FROM "time" WHERE "date" = ?;`, [req.date]);
-
-    next();
 });
 
 DayRouter.get('/:date', (req, res, next) => {
