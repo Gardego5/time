@@ -1,6 +1,7 @@
 import express from 'express';
 
 import middleware from './modules/middleware.js';
+import utils from './modules/utils.js';
 
 const DayRouter = express.Router({mergeParams: true});
 
@@ -22,8 +23,37 @@ DayRouter.get('/:date', (req, res, next) => {
     }
 });
 
-DayRouter.put('/', middleware.validate, async (req, res, next) => {
-    const currentValue = await req.db.get(`SELECT * FROM "time" WHERE "date" = ?;`, [req.day.date])
+DayRouter.put('/:date', async (req, res, next) => {
+    req.day = utils.cleanDay(req.body);
+
+    const currentValue = await req.db.get(`SELECT * FROM "time" WHERE "date" = ?;`, [req.date]);
+
+    if (currentValue) {
+        for (let property of Object.getOwnPropertyNames(currentValue)) {
+            req.day[property] = req.day.hasOwnProperty(property) ? req.day[property] : currentValue[property];
+        }
+    } else {
+        res.status(404).send("No entry for that day.");
+        return;
+    }
+
+    await req.db.run(`
+        UPDATE "time"
+        SET
+            "hours" = ?,
+            "placements" = ?,
+            "videos" = ?,
+            "return visits" = ?,
+            "studies" = ?
+        WHERE "date" = ?;
+    `, [req.day.hours, req.day.placements, req.day.videos, req.day["return visits"], req.day.studies, req.date]);
+
+    const entry = await req.db.get('SELECT * FROM "time" WHERE "date" = ?;', [req.date]);
+    res.status(200).send(entry);
+});
+
+DayRouter.post('/', middleware.validate, async (req, res, next) => {
+    const currentValue = await req.db.get(`SELECT * FROM "time" WHERE "date" = ?;`, [req.day.date]);
 
     if (currentValue) {
         res.status(409).send("Day already exists.");
@@ -31,9 +61,9 @@ DayRouter.put('/', middleware.validate, async (req, res, next) => {
         await req.db.run(`
             INSERT INTO "time" ("date", "hours", "placements", "videos", "return visits", "studies")
             VALUES (?, ?, ?, ?, ?, ?);
-        `, Object.values(req.day));
+        `, [req.day.date, req.day.hours, req.day.placements, req.day.videos, req.day["return visits"], req.day.studies]);
 
-        const entry = await req.db.get('SELECT * FROM "time" ORDER BY "id" DESC LIMIT 1;');
+        const entry = await req.db.get('SELECT * FROM "time" WHERE "date" = ?;', [req.day.date]);
         res.status(201).send(entry);
     }
 });

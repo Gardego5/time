@@ -1,4 +1,4 @@
-const validateDate = dateStr => {
+export const validateDate = dateStr => {
     const date = new Date(dateStr);
     return (
         date.toJSON() &&
@@ -10,7 +10,7 @@ const validateDate = dateStr => {
 
 const cleanDate = dateStr => (new Date(dateStr)).toJSON();
 
-const cleanDay = day => {
+export const cleanDay = day => {
     day.date = cleanDate(day.date);
     day = {
         "date": day.date,
@@ -23,6 +23,6 @@ const cleanDay = day => {
     return day;
 }
 
-const zerod = num => num ? num : 0;
+export const zerod = num => num ? num : 0;
 
-export { validateDate, cleanDay, zerod };
+export default { validateDate, cleanDay, zerod };
