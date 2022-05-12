@@ -113,6 +113,23 @@ export async function generateCalendar(month) {
         childElements.push(Object.assign(document.createElement('div'), { className: 'day' }));
     }
 
+    // Add Totals
+    let totalsData = await fetch(`/month/${currentDate.toJSON()}/total`);
+    if (totalsData.ok) {
+        totalsData = await totalsData.json();
+
+        const totals = Object.assign(document.createElement('div'), {
+            className: 'stats',
+        });
+        for (let field of ['hours', 'placements', 'videos', 'return visits', 'studies']) {
+            totals.appendChild(Object.assign(document.createElement('p'), {
+                className: 'stat',
+                textContent: `${field.slice(0, 1).toUpperCase() + field.slice(1)}: ${totalsData[field]}`,
+            }));
+        }
+
+        childElements.push(totals);
+    }
 
     // Add all elements to calendar element and return it.
     for (let child of childElements) calendarElement.appendChild(child);
