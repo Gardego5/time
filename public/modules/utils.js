@@ -62,8 +62,11 @@ export const dayInnerElements = (day, editor = false) => {
                 body: JSON.stringify(data),
             });
 
+            // Change back to normal mode and update data displayed.
             this.parentElement.toggleEdit();
             this.parentElement.updateData();
+            // Update the Calendar's Totals Statistics.
+            this.parentElement.parentElement.getElementsByClassName("stats")[0].updateData();
         }
     }));
 
