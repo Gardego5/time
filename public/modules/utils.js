@@ -74,3 +74,12 @@ export const dayInnerElements = (day, editor = false) => {
 }
 
 export const getDayNum = day => (new Date(day.date)).getDate();
+
+export const getPreviousMonth = date => {
+    const prev = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+    return prev;
+}
+
+export const getNextMonth = date => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 1);
+}

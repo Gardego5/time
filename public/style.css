@@ -10,7 +10,7 @@
 
 .calendar-box {
     display: grid;
-    grid-template-columns: repeat(7, auto);
+    grid-template-columns: repeat(9, auto);
     margin-inline: auto;
     gap: 0.2em;
 }
@@ -20,7 +20,7 @@
 }
 
 .month {
-    grid-column: span 7;
+    grid-column: 2 / span 7;
 }
 
 .month,
@@ -30,6 +30,20 @@
     padding: 0.5em;
     background-color: lightblue;
     margin: 0;
+}
+
+.left-arrow { grid-column: 1; }
+.right-arrow { grid-column: 9; }
+.left-arrow,
+.right-arrow {
+    grid-row: 1 / 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.arrow {
+    border: solid darkgoldenrod 1px;
+    border-radius: 0.2em;
 }
 
 .day {
@@ -73,7 +87,7 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    grid-column: span 7;
+    grid-column: 2 / span 7;
 }
 
 .data,

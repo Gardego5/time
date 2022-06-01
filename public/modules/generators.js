@@ -1,4 +1,4 @@
-import { dayInnerElements, daysInMonth } from "./utils.js";
+import { dayInnerElements, daysInMonth, getPreviousMonth, getNextMonth } from "./utils.js";
 
 export function generateDayDiv(day) {
     let tag = Object.assign(document.createElement('div'), {
@@ -62,12 +62,13 @@ export function generateDayDiv(day) {
     return tag;
 }
 
-export async function generateCalendar(month) {
+async function generateCalendarEntries(month) {
     const currentDate = new Date(month);
 
     // Gets an array of objects with date recorded.
     let currentMonth = daysInMonth(currentDate);
 
+    console.log(month);
     // Updates array with monthData, fetched from server.
     let monthData = await fetch(`/month/${currentDate}`);
     if (monthData.ok) {
@@ -83,13 +84,22 @@ export async function generateCalendar(month) {
     const calendarMonthOffset = (new Date(currentMonth[0].date)).getDay();
     const calendarMonthFiller = 7 - (currentMonth.length + calendarMonthOffset) % 7;
 
-
-    // Create main element and array to add as children.
-    const calendarElement = Object.assign(document.createElement('div'), {
-        className: 'calendar-box',
-        id: `calendar-${month}`,
-    });
     const childElements = [];
+
+    // Add Arrows
+    let leftarrow = Object.assign(document.createElement('div'), { className: 'left-arrow' });
+    let rightarrow = Object.assign(document.createElement('div'), { className: 'right-arrow' });
+    leftarrow.appendChild(Object.assign(document.createElement('button'), {
+        className: 'arrow',
+        textContent: '<',
+        onclick: function() { this.parentElement.parentElement.newCalendar(getPreviousMonth(currentDate)); }
+    }));
+    rightarrow.appendChild(Object.assign(document.createElement('button'), {
+        className: 'arrow',
+        textContent: '>',
+        onclick: function() { this.parentElement.parentElement.newCalendar(getNextMonth(currentDate)); }
+    }));
+    childElements.push(leftarrow, rightarrow);
 
     // Add Headings
     childElements.push(Object.assign(document.createElement('div'), {
@@ -140,7 +150,25 @@ export async function generateCalendar(month) {
 
     childElements.push(totals);
 
-    // Add all elements to calendar element and return it.
-    for (let child of childElements) calendarElement.appendChild(child);
+    console.log(childElements)
+    return childElements;
+}
+
+export async function generateCalendar(month) {
+    // Create main element and array to add as children.
+    const calendarElement = Object.assign(document.createElement('div'), {
+        className: 'calendar-box',
+        id: `calendar-${month}`,
+        newCalendar: async function(month) {
+            while (this.firstChild) this.removeChild(this.firstChild);
+            const childElements = await generateCalendarEntries(month);
+
+            // Add all elements to calendar element and return it.
+            for (let child of childElements) calendarElement.appendChild(child);
+        }
+    });
+
+    calendarElement.newCalendar(month);
+
     return calendarElement;
 }
