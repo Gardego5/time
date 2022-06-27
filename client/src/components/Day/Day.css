@@ -1,0 +1,53 @@
+.day {
+  background-color: antiquewhite;
+  border: solid darkgoldenrod 1px;
+  width: 8em;
+  display: grid;
+  position: relative;
+  grid-template-columns: auto 2em;
+}
+
+.day-number,
+.end-edit {
+  position: absolute;
+  width: 1.5rem;
+  height: 1rem;
+  display: grid;
+  place-content: center;
+  background-color: white;
+  z-index: 1;
+  margin: 0;
+  border: 0;
+}
+
+.day-number {
+  top: 0;
+  border-radius: 0.2em 0 0 0;
+}
+
+.end-edit {
+  font-size: 1em;
+  bottom: 0;
+  border-radius: 0 0 0 0.2em;
+}
+
+.end-edit:active {
+  background-color: darkgoldenrod;
+}
+
+label {
+  text-align: right;
+}
+
+input {
+  border: none;
+  margin-left: 0.2em;
+  background-color: antiquewhite;
+  padding-inline: 0.3em;
+  border-radius: 0.2em;
+}
+
+input:focus {
+  outline: none;
+  background-color: white;
+}
