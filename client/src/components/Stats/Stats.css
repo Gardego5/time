@@ -5,3 +5,8 @@
   justify-content: space-around;
   grid-column: 2 / span 7;
 }
+
+.stat {
+  padding: 0.5em;
+  margin: 0;
+}

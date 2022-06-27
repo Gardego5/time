@@ -13,6 +13,8 @@ export default class Day extends React.Component {
     };
 
     this.fieldChange = this.fieldChange.bind(this);
+    this.sendChange = this.sendChange.bind(this);
+    this.getChange = this.getChange.bind(this);
   }
 
   fieldChange(event) {
@@ -22,13 +24,33 @@ export default class Day extends React.Component {
     });
   }
 
-  async componentDidMount() {
+  async sendChange(event) {
+    const data = ['hours', 'placements', 'videos', 'return visits', 'studies']
+      .filter(key => key in this.state)
+      .reduce((obj2, key) => (obj2[key] = this.state[key], obj2), {});
+
+    const req = await fetch(`/day/${this.props.date.toJSON()}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    console.log(data);
+  }
+
+  async getChange() {
     let data = await fetch(`/day/${this.props.date.toJSON()}`);
     if (data.status === 200) {
       data = await data.json();
 
       this.setState(data);
     }
+  }
+
+  async componentDidMount() {
+    await this.getChange();
   }
 
   render() {
@@ -43,7 +65,7 @@ export default class Day extends React.Component {
         <Field type='videos' date={ date } onChange={ this.fieldChange } value={ this.state['videos'] } />
         <Field type='return visits' date={ date } onChange={ this.fieldChange } value={ this.state['return visits'] } />
         <Field type='studies' date={ date } onChange={ this.fieldChange } value={ this.state['studies'] } />
-        <button className='end-edit' style={{ display: this.state.hasChanged ? 'block' : 'none' }}>✓</button>
+        <button className='end-edit' style={{ display: this.state.hasChanged ? 'block' : 'none' }} onClick={ this.sendChange } >✓</button>
       </div>
     );
   }

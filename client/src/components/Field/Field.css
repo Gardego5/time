@@ -1,0 +1,39 @@
+
+
+.end-edit {
+  font-size: 1em;
+  bottom: 0;
+  border-radius: 0 0 0 0.2em;
+}
+
+.end-edit:active {
+  background-color: darkgoldenrod;
+}
+
+label {
+  text-align: right;
+  margin-right: 0.2em;
+}
+
+input {
+  border: none;
+  margin: 0.1em;
+  background-color: #fff6;
+  padding-inline: 0.3em;
+  border-radius: 0.2em;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input:focus {
+  outline: none;
+  background-color: white;
+}

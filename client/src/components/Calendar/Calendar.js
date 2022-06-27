@@ -5,7 +5,7 @@ import Day from '../Day/Day';
 import Spacer from '../Day/Spacer';
 import Stats from '../Stats/Stats';
 
-import { daysInMonth } from '../../utils/utils';
+import { daysInMonth, getPreviousMonth, getNextMonth } from '../../utils/utils';
 
 import './Calendar.css';
 
@@ -16,6 +16,8 @@ export default class Calendar extends React.Component {
     this.state = {
       date: new Date(),
     }
+
+    this.changeMonth = this.changeMonth.bind(this);
   }
 
   get beforeOffset() {
@@ -30,6 +32,14 @@ export default class Calendar extends React.Component {
     return daysInMonth(this.state.date).map(day => <Day date={day.date} key={day.date.toJSON()} />);
   }
 
+  changeMonth( prev ) {
+    if ( prev ) {
+      return (event => this.setState({ date: getPreviousMonth(this.state.date) })).bind(this);
+    } else {
+      return (event => this.setState({ date: getNextMonth(this.state.date) })).bind(this);
+    }
+  }
+
   render() {
     const month = this.state.date.toDateString().split(' ')[1];
 
@@ -37,15 +47,24 @@ export default class Calendar extends React.Component {
       'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     ].map(weekday => <div className='day-title' key={ weekday }>{ weekday }</div>);
 
-    return <div className='calendar-box' id={ `calendar-${month}` }>
-      <MonthSelector prev={ true } />
-      <MonthSelector prev={ false } />
-      <div className='month-title'>{ month }</div>
-      { weekdayTitles }
-      <Spacer days={ this.beforeOffset } />
-      { this.days }
-      <Spacer days={ this.afterOffset } />
-      <Stats />
-    </div>;
+    const spacers = {
+      before: this.beforeOffset !== 0 ? <Spacer days={ this.beforeOffset } /> : null,
+      after: this.afterOffset < 7 ? <Spacer days={ this.afterOffset } /> : null,
+    }
+
+    console.log(this.beforeOffset, this.afterOffset)
+
+    return (
+      <div className='calendar-box' id={ `calendar-${month}` }>
+        <MonthSelector prev={ true } onClick={ this.changeMonth(true) } />
+        <MonthSelector prev={ false } onClick={ this.changeMonth(false) } />
+        <div className='month-title'>{ month }</div>
+        { weekdayTitles }
+        { spacers.before }
+        { this.days }
+        { spacers.after }
+        <Stats date={ this.state.date } />
+      </div>
+    );
   }
 }

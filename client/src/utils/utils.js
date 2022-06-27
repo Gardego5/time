@@ -9,11 +9,7 @@ export const daysInMonth = (date) => {
     )
 }
 
-export const getPreviousMonth = date => {
-    const prev = new Date(date.getFullYear(), date.getMonth() - 1, 1);
-    return prev;
-}
+export const getPreviousMonth = date => new Date(date.getFullYear(), date.getMonth() - 1, 1);
 
-export const getNextMonth = date => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 1);
-}
+
+export const getNextMonth = date => new Date(date.getFullYear(), date.getMonth() + 1, 1);
