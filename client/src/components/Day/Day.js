@@ -37,7 +37,8 @@ export default class Day extends React.Component {
         body: JSON.stringify(data),
     });
 
-    console.log(data);
+    await this.getChange();
+    await this.props.onUpdate();
   }
 
   async getChange() {

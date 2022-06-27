@@ -18,6 +18,7 @@ export default class Calendar extends React.Component {
     }
 
     this.changeMonth = this.changeMonth.bind(this);
+    this.getTotals = this.getTotals.bind(this);
   }
 
   get beforeOffset() {
@@ -29,7 +30,12 @@ export default class Calendar extends React.Component {
   }
 
   get days() {
-    return daysInMonth(this.state.date).map(day => <Day date={day.date} key={day.date.toJSON()} />);
+    return daysInMonth(this.state.date).map(day => (
+      <Day
+        date={ day.date }
+        key={ day.date.toJSON() }
+        onUpdate={ this.getTotals } />
+    ));
   }
 
   changeMonth( prev ) {
@@ -38,6 +44,23 @@ export default class Calendar extends React.Component {
     } else {
       return (event => this.setState({ date: getNextMonth(this.state.date) })).bind(this);
     }
+  }
+
+  async getTotals() {
+    let data = await fetch(`/month/${this.state.date.toJSON()}/total`);
+    if (data.status === 200) {
+      data = await data.json();
+
+      this.setState({ totals: data });
+    }
+  }
+
+  async componentDidMount() {
+    await this.getTotals();
+  }
+
+  async componentDidUpdate() {
+    await this.getTotals();
   }
 
   render() {
@@ -52,8 +75,6 @@ export default class Calendar extends React.Component {
       after: this.afterOffset < 7 ? <Spacer days={ this.afterOffset } /> : null,
     }
 
-    console.log(this.beforeOffset, this.afterOffset)
-
     return (
       <div className='calendar-box' id={ `calendar-${month}` }>
         <MonthSelector prev={ true } onClick={ this.changeMonth(true) } />
@@ -63,7 +84,7 @@ export default class Calendar extends React.Component {
         { spacers.before }
         { this.days }
         { spacers.after }
-        <Stats date={ this.state.date } />
+        <Stats totals={ this.state.totals } />
       </div>
     );
   }
