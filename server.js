@@ -1,4 +1,7 @@
 import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
@@ -13,11 +16,17 @@ const dbPromise = open({
 })
 
 const PORT = process.env.PORT || 3001;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Old Client running on localhost:3001
 // app.use(express.static('public'));
 
+// New Client
+app.use(express.static(path.join(__dirname, "./client/build")));
+
 app.use(express.json());
+app.use(cors());
 
 /** Attach database so accesible to requests. */
 app.use(async (req, res, next) => {

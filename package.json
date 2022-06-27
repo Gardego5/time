@@ -5,14 +5,18 @@
     "main": "server.js",
     "type": "module",
     "scripts": {
-        "start": "concurrently \"npm run server\" \"npm run client\"",
+        "start": "npm run server",
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
         "server": "node server.js",
-        "client": "cd client && npm start"
+        "client": "npm start --prefix client",
+        "build": "npm run build --prefix client"
     },
     "author": "Garrett Davis",
     "dependencies": {
         "concurrently": "^7.2.2",
+        "cors": "^2.8.5",
         "express": "^4.18.1",
+        "path": "^0.12.7",
         "sqlite": "^4.1.1",
         "sqlite3": "^5.0.8"
     }
