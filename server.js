@@ -15,7 +15,7 @@ const dbPromise = open({
     driver: sqlite3.Database
 })
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || process.argv.includes('dev') ? 3001 : 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -23,7 +23,9 @@ const __dirname = path.dirname(__filename);
 // app.use(express.static('public'));
 
 // New Client
-app.use(express.static(path.join(__dirname, "./client/build")));
+if (!process.argv.includes('dev')) {
+    app.use(express.static(path.join(__dirname, "./client/build")));
+}
 
 app.use(express.json());
 app.use(cors());
