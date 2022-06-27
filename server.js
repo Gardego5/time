@@ -14,7 +14,9 @@ const dbPromise = open({
 
 const PORT = process.env.PORT || 3001;
 
-app.use(express.static('public'));
+// Old Client running on localhost:3001
+// app.use(express.static('public'));
+
 app.use(express.json());
 
 /** Attach database so accesible to requests. */
