@@ -48,6 +48,8 @@ export default class Day extends React.Component {
 
       this.setState(data);
     }
+
+    this.state.hasChanged = false;
   }
 
   async componentDidMount() {
