@@ -1,0 +1,48 @@
+:root {
+  font-family: Archivo;
+  --white: #f4f6f4;
+  --lavender: #dedbe6;
+  --green: #a6baa0;
+  --charcoal: #424c55;
+  --yellow: #f3d34a;
+  --orange: #f97733;
+  --red: #ff1b1c;
+  --shadow: #0006;
+  --light-shadow: #0002;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 550;
+}
+
+h3 {
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+
+h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+p {
+  font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-block: 0.25em;
+  line-height: 1.25;
+}
+
+.serif {
+  font-family: "EB Garamond";
+}
