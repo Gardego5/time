@@ -27,8 +27,13 @@
 <style>
   div.container {
     display: grid;
-    grid-template-columns: repeat(7, calc(4rem + 2px));
+    grid-template-columns: repeat(7, auto);
     justify-items: center;
-    gap: 1.25rem 1.5rem;
+    gap: .75rem .75rem;
+  }
+  @media only screen and (min-width: 600) {
+    div.container {
+      gap: 1.25rem 1.5rem;
+    }
   }
 </style>

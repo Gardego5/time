@@ -25,7 +25,7 @@
 </script>
 
 <label for={id}>{label}</label>
-<div class="chic" bg={color}></div>
+<div class="chic" style={`background-color: var(--${color});`}></div>
 <div class="container">
   <button class="decrement" on:click={handleChange(0)}>-</button>
   <input bind:this={inputRef} type="number" {id} {value} />
@@ -91,7 +91,7 @@
   }
 
   div.chic {
-    width: 0.5rem;
+    width: 0.65rem;
     border-radius: 50%;
     aspect-ratio: 1 / 1;
     margin: auto;

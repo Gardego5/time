@@ -12,14 +12,14 @@
 
 <button class="main" on:click={openEdit}>
   <p class="day-number">{day.date.getDate()}</p>
-  <div class="chic placements" />
-  <div class="chic videos" />
+  <div class="chic placements" role="presentation" class:hidden={true} />
+  <div class="chic videos" role="presentation" class:hidden={true} />
   <div class="chic hours">
-    <div class="ldc" />
-    <div class="fs" />
+    <div class="ldc" role="presentation" class:hidden={true} />
+    <div class="fs" role="presentation"  />
   </div>
-  <div class="chic studies" />
-  <div class="chic rvs" />
+  <div class="chic studies" role="presentation" class:hidden={true} />
+  <div class="chic rvs" role="presentation" class:hidden={true} />
 </button>
 
 <style>
@@ -29,7 +29,8 @@
     color: var(--charcoal);
     border: 1px solid var(--green);
 
-    --radius: 2rem;
+    --radius: 1rem;
+    --chic: 0.45rem; 
 
     display: grid;
     place-content: center;
@@ -38,8 +39,20 @@
     width: calc(2 * var(--radius));
     height: calc(2 * var(--radius));
     border-radius: 50%;
-    font-size: 1.8rem;
     font-weight: 300;
+    font-size: 1rem;
+  }
+  @media only screen and (min-width: 375px) {
+    .main {
+      --radius: 1.2rem;
+    }
+  }
+  @media only screen and (min-width: 600px) {
+    .main {
+      --radius: 1.8rem;
+      --chic: 0.65rem;
+      font-size: 1.5rem;
+    }
   }
   button:hover {
     box-shadow: 0px 0px 4px 0px var(--shadow);
@@ -48,12 +61,12 @@
     border: 1px solid var(--white);
 
     position: absolute;
-    width: 0.65rem;
-    height: 0.65rem;
+    width: var(--chic);
+    height: var(--chic);
     aspect-ratio: 1 / 1;
     border-radius: 50%;
-    top: calc(50% - 0.325rem - 1px);
-    left: calc(50% - 0.325rem - 1px);
+    top: calc(50% - var(--chic) * 0.5 - 1px);
+    left: calc(50% - var(--chic) * 0.5 - 1px);
     overflow: hidden;
   }
   div.chic.placements {
@@ -86,5 +99,9 @@
   div.chic.rvs {
     background: var(--lavender);
     transform: rotate(200deg) translateX(var(--radius));
+  }
+
+  div.hidden {
+    visibility: hidden;
   }
 </style>

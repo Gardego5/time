@@ -1,32 +1,37 @@
 <script>
   import Entry from "./Entry.svelte";
 
-  export var open = false;
-  export var day = undefined;
+  export var date = undefined;
 
-  const toggleOpen = (event) => (open = !open);
+  const day = {
+    date,
+    fs: 0,
+    ldc: 0,
+    rv: 0,
+    bs: 0,
+    pl: 0,
+    vi: 0,
+  }
 </script>
 
-<div class="container" class:open={day}>
-  <div class="shadow" role="presentation" on:click={() => day = undefined}></div>
+<div class="container" class:open={date}>
+  <div class="shadow" role="presentation" on:click={() => (date = undefined)} />
   <div class="card">
-    {#if day}
-    <p class="day">{day.date.toLocaleDateString()}</p>
+    {#if date}
+      <p class="day">{date.toLocaleDateString()}</p>
     {/if}
 
-    <Entry label={"FS Time"} color="black" />
-    <Entry label={"LDC Time"} />
-    <Entry label={"Return Visits"} />
-    <Entry label={"Bible Studies"} />
-    <Entry label={"Placements"} />
-    <Entry label={"Videos"} />
+    <Entry bind:value={day.fs} label={"FS Time"} color="charcoal" />
+    <Entry bind:value={day.ldc} label={"LDC Time"} color="red" />
+    <Entry bind:value={day.rv} label={"Return Visits"} color="lavender" />
+    <Entry bind:value={day.bs} label={"Bible Studies"} color="green" />
+    <Entry bind:value={day.pl} label={"Placements"} color="yellow" />
+    <Entry bind:value={day.vi} label={"Videos"} color="orange" />
 
     <div class="row">
-      <button class="save edit-button" on:click={toggleOpen}>
-        SAVE
-      </button>
-      <button class="delete edit-button" on:click={toggleOpen}>
-        {day ? "DELETE" : "CANCEL" }
+      <button class="save edit-button" on:click={() => console.log(day)}> SAVE </button>
+      <button class="delete edit-button">
+        {date ? "DELETE" : "CANCEL"}
       </button>
     </div>
   </div>

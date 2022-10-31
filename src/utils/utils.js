@@ -12,3 +12,9 @@ export const getPreviousMonth = (date) =>
 
 export const getNextMonth = (date) =>
   new Date(date.getFullYear(), date.getMonth() + 1, 1);
+
+export const getStartOfMonth = (date) =>
+  new Date(date.getFullYear(), date.getMonth(), 1);
+
+export const getEndOfMonth = (date) =>
+  new Date(date.getFullYear(), date.getMonth() + 1, 0);
