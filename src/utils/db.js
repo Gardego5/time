@@ -65,10 +65,20 @@ export const readDay = async (date) => {
   return { ...fallback(dateKey), ...result };
 };
 
+export const deleteDay = async (date) => {
+  const db = await getDB();
+
+  const dateKey = date.toJSON();
+  const thisDate = IDBKeyRange.only(dateKey);
+
+  await db.delete(DB_STORE, thisDate);
+  db.close();
+}
+
 export const writeDay = async (data) => {
   const db = await getDB();
 
   await db.put(DB_STORE, data);
-
   db.close();
 };
+

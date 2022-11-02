@@ -1,21 +1,14 @@
 <script>
   import EditModal from "$lib/EditModal.svelte";
   import CalendarMonth from "$lib/CalendarMonth.svelte";
-  import { readMonth, writeDay } from "src/utils/db";
 
   var editModalDate;
-  var today = new Date();
+  var currentMonth = new Date();
 
-  const handleEdit = (event) => editModalDate = event.detail.date;
-
-  const getPromise = () => readMonth(today);
-  $: promise = getPromise();
+  const handleEdit = (event) => (editModalDate = event.detail.date);
+  const handleRefresh = (event) => currentMonth = currentMonth;
 </script>
 
-{#await promise}
-  <p>Loading...</p>
-{:then data}
-  <CalendarMonth on:edit={handleEdit} bind:today />
-{/await}
+<CalendarMonth on:edit={handleEdit} bind:currentMonth />
 
-<EditModal date={editModalDate} />
+<EditModal on:needsRefresh={handleRefresh} date={editModalDate} />

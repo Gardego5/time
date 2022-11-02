@@ -28,7 +28,7 @@
 <div class="chic" style={`background-color: var(--${color});`}></div>
 <div class="container">
   <button class="decrement" on:click={handleChange(0)}>-</button>
-  <input bind:this={inputRef} type="number" {id} {value} />
+  <input bind:this={inputRef} type="number" {id} bind:value />
   <button class="increment" on:click={handleChange(1)}>+</button>
 </div>
 

@@ -8,14 +8,15 @@
   import DateButton from "src/lib/DateButton.svelte";
   import { readMonth } from "src/utils/db";
 
-  export var today;
+  export var currentMonth;
 
   var data, days, offset;
 
-  $: readMonth(today).then((response) => (data = response));
+  $: if (typeof indexedDB !== "undefined")
+    readMonth(currentMonth).then((response) => (data = response));
 
   $: if (data)
-    days = entriesInMonth(today).map((entry) => {
+    days = entriesInMonth(currentMonth).map((entry) => {
       const savedDay = data.filter(
         ({ date }) => date === entry.date.toJSON()
       )[0];
@@ -26,9 +27,13 @@
 </script>
 
 <div class="top-container">
-  <button on:click={() => (today = getPreviousMonth(today))}>prev</button>
-  <h2>{time.months.full[today.getMonth()]}</h2>
-  <button on:click={() => (today = getNextMonth(today))}>next</button>
+  <button on:click={() => (currentMonth = getPreviousMonth(currentMonth))}
+    >prev</button
+  >
+  <h2>{time.months.full[currentMonth.getMonth()]}</h2>
+  <button on:click={() => (currentMonth = getNextMonth(currentMonth))}
+    >next</button
+  >
 </div>
 <div class="container">
   {#each time.weekdays.abbreviated as day}
@@ -39,6 +44,8 @@
     {#each days as day, i}
       <DateButton {day} on:edit --static-column={i === 0 ? offset : ""} />
     {/each}
+  {:else}
+    <p>Loading...</p>
   {/if}
 </div>
 

@@ -1,6 +1,9 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import Entry from "./Entry.svelte";
-  import { readDay, writeDay } from "src/utils/db";
+  import { readDay, writeDay, deleteDay } from "src/utils/db";
+
+  const dispatch = createEventDispatcher();
 
   export var date = undefined;
 
@@ -14,9 +17,16 @@
   const update = async () =>
     ({ fs, ldc, rv, bs, pl, vi } = await readDay(date));
 
-  const save = (event) => {
-    writeDay({ date: date.toJSON(), fs, ldc, rv, bs, pl, vi });
+  const del = async (event) => {
+    await deleteDay(date);
     date = undefined;
+    dispatch("needsRefresh")
+  };
+
+  const save = async (event) => {
+    await writeDay({ date: date.toJSON(), fs, ldc, rv, bs, pl, vi });
+    date = undefined;
+    dispatch("needsRefresh")
   };
 
   $: if (date) update();
@@ -29,8 +39,8 @@
       <p class="day">{date.toLocaleDateString()}</p>
     {/if}
 
-    <Entry bind:value={fs} label={"FS Time"} color="charcoal" />
-    <Entry bind:value={ldc} label={"LDC Time"} color="red" />
+    <Entry bind:value={fs} label={"FS Time"} color="charcoal" delta={0.5} />
+    <Entry bind:value={ldc} label={"LDC Time"} color="red" delta={0.5} />
     <Entry bind:value={rv} label={"Return Visits"} color="lavender" />
     <Entry bind:value={bs} label={"Bible Studies"} color="green" />
     <Entry bind:value={pl} label={"Placements"} color="yellow" />
@@ -38,7 +48,7 @@
 
     <div class="row">
       <button class="save edit-button" on:click={save}> SAVE </button>
-      <button class="delete edit-button">
+      <button class="delete edit-button" on:click={del}>
         {date ? "DELETE" : "CANCEL"}
       </button>
     </div>
