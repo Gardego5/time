@@ -18,3 +18,6 @@ export const getStartOfMonth = (date) =>
 
 export const getEndOfMonth = (date) =>
   new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+export const getDateIndex = (date) =>
+  new Date(date.getFullYear(), date.getMonth(), date.getDay() - 1);

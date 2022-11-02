@@ -6,20 +6,20 @@
   const dispatch = createEventDispatcher();
 
   const openEdit = (event) => {
-    dispatch("edit", { day });
+    dispatch("edit", day);
   };
 </script>
 
 <button class="main" on:click={openEdit}>
   <p class="day-number">{day.date.getDate()}</p>
-  <div class="chic placements" role="presentation" class:hidden={true} />
-  <div class="chic videos" role="presentation" class:hidden={true} />
-  <div class="chic hours">
-    <div class="ldc" role="presentation" class:hidden={true} />
-    <div class="fs" role="presentation"  />
+  <div class="chic placements" role="presentation" class:hidden={!day.pl} />
+  <div class="chic videos" role="presentation" class:hidden={!day.vi} />
+  <div class="chic hours" class:hidden={!day.ldc && !day.fs}>
+    <div class="ldc" role="presentation" class:hidden={!day.ldc} />
+    <div class="fs" role="presentation" class:hidden={!day.fs} />
   </div>
-  <div class="chic studies" role="presentation" class:hidden={true} />
-  <div class="chic rvs" role="presentation" class:hidden={true} />
+  <div class="chic studies" role="presentation" class:hidden={!day.bs} />
+  <div class="chic rvs" role="presentation" class:hidden={!day.rv} />
 </button>
 
 <style>

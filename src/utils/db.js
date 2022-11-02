@@ -16,27 +16,59 @@ const DB_STORE = "time";
     vi     :  number
  */
 
-const getDB = async () => (await openDB(DB_NAME, DB_VERSION, {
-  upgrade(db, oldVersion, newVersion, transaction, event) {
-    // create a store if this is the first time opening the db.
-    const store = db.createObjectStore(DB_STORE, { keyPath: "date" });
+const fallback = (date) => ({
+  date,
+  fs: 0,
+  ldc: 0,
+  rv: 0,
+  bs: 0,
+  pl: 0,
+  vi: 0,
+});
 
-    store.createIndex("fs", "fs", { unique: false });
-    store.createIndex("ldc", "ldc", { unique: false });
-    store.createIndex("rv", "rv", { unique: false });
-    store.createIndex("bs", "bs", { unique: false });
-    store.createIndex("pl", "pl", { unique: false });
-    store.createIndex("vi", "vi", { unique: false });
-  },
-}))
+const getDB = async () =>
+  await openDB(DB_NAME, DB_VERSION, {
+    upgrade(db, oldVersion, newVersion, transaction, event) {
+      // create a store if this is the first time opening the db.
+      const store = db.createObjectStore(DB_STORE, { keyPath: "date" });
+
+      store.createIndex("fs", "fs", { unique: false });
+      store.createIndex("ldc", "ldc", { unique: false });
+      store.createIndex("rv", "rv", { unique: false });
+      store.createIndex("bs", "bs", { unique: false });
+      store.createIndex("pl", "pl", { unique: false });
+      store.createIndex("vi", "vi", { unique: false });
+    },
+  });
 
 export const readMonth = async (date) => {
   const db = await getDB();
 
   const thisMonth = IDBKeyRange.bound(
-    JSON.stringify(getStartOfMonth(date)),
-    JSON.stringify(getEndOfMonth(date))
+    getStartOfMonth(date).toJSON(),
+    getEndOfMonth(date).toJSON()
   );
 
-  return await db.getAll(DB_STORE, thisMonth);
+  const result = await db.getAll(DB_STORE, thisMonth);
+  db.close();
+  return result;
+};
+
+export const readDay = async (date) => {
+  const db = await getDB();
+
+  const dateKey = date.toJSON();
+  const thisDate = IDBKeyRange.only(dateKey);
+
+  const result = await db.get(DB_STORE, thisDate);
+  db.close();
+  return { ...fallback(dateKey), ...result };
+};
+
+export const writeDay = async (data) => {
+  const db = await getDB();
+
+  await db.put(DB_STORE, data);
+
+  db.close();
 };
