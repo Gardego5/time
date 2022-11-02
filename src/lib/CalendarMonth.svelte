@@ -7,6 +7,7 @@
   import { time } from "src/utils/info.js";
   import DateButton from "src/lib/DateButton.svelte";
   import { readMonth } from "src/utils/db";
+  import Totals from "./Totals.svelte";
 
   export var currentMonth;
 
@@ -48,6 +49,9 @@
     <p>Loading...</p>
   {/if}
 </div>
+{#if currentMonth}
+  <Totals {currentMonth} />
+{/if}
 
 <style>
   div.container {

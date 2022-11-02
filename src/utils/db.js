@@ -54,6 +54,21 @@ export const readMonth = async (date) => {
   return result;
 };
 
+export const readTotals = async (date) => {
+  const data = await readMonth(date);
+
+  console.log("data", data)
+
+  return data.reduce((prev, curr) => ({
+    fs: prev.fs + curr.fs,
+    ldc: prev.ldc + curr.ldc,
+    rv: prev.rv + curr.rv,
+    bs: prev.bs + curr.bs,
+    pl: prev.pl + curr.pl,
+    vi: prev.vi + curr.vi,
+  }))
+}
+
 export const readDay = async (date) => {
   const db = await getDB();
 
