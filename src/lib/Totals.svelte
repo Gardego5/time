@@ -5,7 +5,7 @@
 
   let totals = {};
   $: if (typeof indexedDB !== "undefined")
-    readTotals(currentMonth).then((res) => {console.log(res);totals = res;});
+    readTotals(currentMonth).then((res) => (totals = res));
 </script>
 
 <div>
@@ -20,6 +20,6 @@
   div {
     margin: 1rem;
     display: flex;
-    gap: 0.5rem
+    gap: 0.5rem;
   }
 </style>
