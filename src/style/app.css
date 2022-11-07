@@ -1,5 +1,6 @@
 :root {
   font-family: Archivo;
+  --light-gray: #e4e6e4;
   --white: #f4f6f4;
   --lavender: #dedbe6;
   --green: #a6baa0;
@@ -9,6 +10,7 @@
   --red: #ff1b1c;
   --shadow: #0006;
   --light-shadow: #0002;
+  background: var(--light-gray);
 }
 
 h1 {

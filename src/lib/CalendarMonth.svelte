@@ -1,41 +1,47 @@
 <script>
+  import Totals from "./Totals.svelte";
+  import DateButton from "src/lib/DateButton.svelte";
+
+  import { readMonth } from "src/utils/db";
+  import { time } from "src/utils/info.js";
   import {
     entriesInMonth,
-    getPreviousMonth,
     getNextMonth,
+    getPreviousMonth,
   } from "src/utils/utils.js";
-  import { time } from "src/utils/info.js";
-  import DateButton from "src/lib/DateButton.svelte";
-  import { readMonth } from "src/utils/db";
-  import Totals from "./Totals.svelte";
 
   export var currentMonth;
 
-  var data, days, offset;
+  $: days = entriesInMonth(currentMonth);
+  $: offset = days[0].date.getDay() + 1;
 
   $: if (typeof indexedDB !== "undefined")
-    readMonth(currentMonth).then((response) => (data = response));
-
-  $: if (data)
-    days = entriesInMonth(currentMonth).map((entry) => {
-      const savedDay = data.filter(
-        ({ date }) => date === entry.date.toJSON()
-      )[0];
-      return savedDay ? { ...savedDay, date: entry.date } : entry;
+    readMonth(currentMonth).then((data) => {
+      days = entriesInMonth(currentMonth).map((entry) => {
+        const savedDay = data.filter(
+          ({ date }) => date === entry.date.toJSON()
+        )[0];
+        return savedDay ? { ...savedDay, date: entry.date } : entry;
+      });
     });
-
-  $: if (days) offset = days[0].date.getDay() + 1;
 </script>
 
 <div class="top-container">
-  <button on:click={() => (currentMonth = getPreviousMonth(currentMonth))}
-    >prev</button
+  <button
+    class="change-month"
+    on:click={() => (currentMonth = getPreviousMonth(currentMonth))}
   >
+    prev
+  </button>
   <h2>{time.months.full[currentMonth.getMonth()]}</h2>
-  <button on:click={() => (currentMonth = getNextMonth(currentMonth))}
-    >next</button
+  <button
+    class="change-month"
+    on:click={() => (currentMonth = getNextMonth(currentMonth))}
   >
+    next
+  </button>
 </div>
+
 <div class="container">
   {#each time.weekdays.abbreviated as day}
     <p>{`${day}.`}</p>
@@ -49,6 +55,7 @@
     <p>Loading...</p>
   {/if}
 </div>
+
 {#if currentMonth}
   <Totals {currentMonth} />
 {/if}
@@ -71,5 +78,13 @@
     div.container {
       gap: 1.25rem 1.5rem;
     }
+  }
+  button.change-month {
+    color: var(--charcoal);
+    background: var(--white);
+    border: 1px solid var(--green);
+    border-radius: 0.75rem;
+    width: 4rem;
+    height: 1.5rem;
   }
 </style>

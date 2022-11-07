@@ -16,7 +16,7 @@ const DB_STORE = "time";
     vi     :  number
  */
 
-const fallback = (date) => ({
+export const fallback = (date) => ({
   date,
   fs: 0,
   ldc: 0,
@@ -64,7 +64,7 @@ export const readTotals = async (date) => {
     bs: prev.bs + curr.bs,
     pl: prev.pl + curr.pl,
     vi: prev.vi + curr.vi,
-  })) : {};
+  })) : fallback();
 };
 
 export const readDay = async (date) => {
