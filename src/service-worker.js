@@ -8,7 +8,7 @@ const staticAssets = new Set(to_cache);
 
 worker.addEventListener("install", (event) => {
   event.waitUntil(
-    caches
+    async () => caches
       .open(FILES)
       .then((cache) => cache.addAll(to_cache))
       .then(() => {

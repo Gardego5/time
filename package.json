@@ -22,6 +22,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-static": "^1.0.0-next.48",
 		"idb": "^7.1.0",
 		"locally-unique-id-generator": "^0.1.5"
 	}
