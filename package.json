@@ -11,7 +11,8 @@
 		"dev": "vite dev",
 		"dev:host": "vite dev --host",
 		"build": "vite build",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"preview:host": "vite preview --host"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",

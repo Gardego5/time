@@ -1,0 +1,6 @@
+{
+  "short_name": "time-tracker",
+  "name": "Time Tracker",
+  "start_url": "/",
+  "scope": "/"
+}
